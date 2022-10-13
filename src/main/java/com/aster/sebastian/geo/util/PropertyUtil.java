@@ -13,7 +13,6 @@ import java.util.Properties;
  */
 public class PropertyUtil {
 
-
     public static <T> T propertyToObject(Properties prop, Class<T> clazz) {
         try {
             Class<?> classType = Class.forName(clazz.getName());
