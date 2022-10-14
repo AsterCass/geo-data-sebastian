@@ -116,6 +116,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>4.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <distributionManagement>

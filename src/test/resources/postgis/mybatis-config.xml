@@ -3,16 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
+    <settings>
+        <!-- 使用驼峰命名法转换字段。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+    </settings>
+
+    <typeHandlers>
+        <typeHandler handler="com.aster.sebastian.geo.mybatis.GeoTypeHandler"/>
+        <typeHandler handler="com.aster.sebastian.geo.mybatis.PointHandler"/>
+    </typeHandlers>
+
+
     <!--声明使用的环境 default是引用环境的id，表示当前所使用的环境 -->
     <environments default="default">
         <environment id="default">
             <!--使用原生JDBC事务  -->
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="org.postgresql.Driver"/>
-                <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+                <property name="driver" value="org.postgis.DriverWrapper"/>
+                <property name="url" value="jdbc:postgresql_postGIS://localhost:5432/gis_sample"/>
                 <property name="username" value="postgres"/>
-                <property name="password" value="12345"/>
+                <property name="password" value="root"/>
             </dataSource>
         </environment>
     </environments>
