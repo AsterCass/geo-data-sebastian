@@ -8,7 +8,13 @@ import com.aster.sebastian.geo.mybatis.PointHandler;
 import com.aster.sebastian.geo.util.ConcaveHullUtils;
 import com.aster.sebastian.geo.util.PointUtils;
 import com.aster.sebastian.geo.utils.MybatisHelper;
-import com.google.common.geometry.*;
+import com.google.common.geometry.S2CellUnion;
+import com.google.common.geometry.S2LatLng;
+import com.google.common.geometry.S2LatLngRect;
+import com.google.common.geometry.S2Loop;
+import com.google.common.geometry.S2Point;
+import com.google.common.geometry.S2Polygon;
+import com.google.common.geometry.S2Region;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
@@ -122,13 +128,6 @@ public class BaseTest {
     @Test
     public void turfTest() {
 
-
-        S2Point point11 = new S2Point(120.0104819409752, 30.401051098438547, 0);
-        S2Point point22 = new S2Point(119.87040625738145, 30.132994731062112, 0);
-        S2Point point33 = new S2Point(120.19038306402207, 30.064083648538357, 0);
-        S2Point point44 = new S2Point(120.15055762456895, 30.243389716036948, 0);
-        S2Point point55 = new S2Point(120.2192221753502, 30.264742187753154, 0);
-        S2Point point66 = new S2Point(120.47328101324082, 30.31098994792401, 0);
 
 
         S2LatLng s11 = S2LatLng.fromDegrees(30.401051098438547, 120.0104819409752);
@@ -249,7 +248,7 @@ public class BaseTest {
 
 
         org.locationtech.jts.geom.Geometry geometry = ConcaveHullUtils
-                .getPolygonByPoint(points, false, 0.9);
+                .getPolygonEarthByPoint(points, false, 0.9);
 
         org.locationtech.jts.geom.Point pointIn = new org.locationtech.jts.geom.Point
                 (new Coordinate(120.14510569119948, 30.3312283585627), new PrecisionModel(), 4326);
@@ -259,8 +258,8 @@ public class BaseTest {
         boolean isIn1 = PointUtils.pointInRegionByJts(pointIn, geometry);
         boolean isIn2 = PointUtils.pointInRegionByJts(pointNotIn, geometry);
 
-        S2Point s2PointIn = PointUtils.jtsPointToS2Point(pointIn);
-        S2Point s2PointNotIn = PointUtils.jtsPointToS2Point(pointNotIn);
+        S2Point s2PointIn = PointUtils.jtsPointToS2PointEarth(pointIn);
+        S2Point s2PointNotIn = PointUtils.jtsPointToS2PointEarth(pointNotIn);
 
 
         Coordinate[] coordinates = geometry.getCoordinates();
@@ -297,8 +296,8 @@ public class BaseTest {
         org.locationtech.jts.geom.Point pointNotIn = new org.locationtech.jts.geom.Point
                 (new Coordinate(120.85810025263835, 30.504777594565585), new PrecisionModel(), 4326);
 
-        S2Point s2PointIn = PointUtils.jtsPointToS2Point(pointIn);
-        S2Point s2PointNotIn = PointUtils.jtsPointToS2Point(pointNotIn);
+        S2Point s2PointIn = PointUtils.jtsPointToS2PointEarth(pointIn);
+        S2Point s2PointNotIn = PointUtils.jtsPointToS2PointEarth(pointNotIn);
 
         org.locationtech.jts.geom.Point pointInx = PointUtils.s2PointToJtsPoint(s2PointIn);
         org.locationtech.jts.geom.Point pointNotInx = PointUtils.s2PointToJtsPoint(s2PointNotIn);
@@ -306,6 +305,35 @@ public class BaseTest {
         System.out.println("11111");
 
     }
+
+    @Test
+    public void twoPointDistant() {
+
+        S2LatLng s11 = S2LatLng.fromDegrees(30.285786080528084, 120.08493741084148);
+        S2LatLng s22 = S2LatLng.fromDegrees(30.304758088734506, 120.23634274531413);
+        double a = s11.getEarthDistance(s22);
+
+        Point point1 = new Point(120.08493741084148, 30.285786080528084);
+        point1.setSrid(4326);
+        Point point2 = new Point(120.23634274531413, 30.304758088734506);
+        point2.setSrid(4326);
+
+        double x = point1.distance(point2);
+
+
+        org.postgis.Point pointx = new org.postgis.Point(120.08493741084148, 30.285786080528084);
+        pointx.setSrid(4326);
+        org.postgis.Point pointy = new org.postgis.Point(120.23634274531413, 30.304758088734506);
+        pointy.setSrid(4326);
+
+        double y = PointUtils.getEarthDistant(pointx, pointy);
+
+
+        System.out.println(111111);
+
+
+    }
+
 
 }
 

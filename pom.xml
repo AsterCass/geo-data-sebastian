@@ -6,7 +6,7 @@
 
     <groupId>com.astercasc</groupId>
     <artifactId>geo-data-sebastian</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>geo-data-sebastian</name>

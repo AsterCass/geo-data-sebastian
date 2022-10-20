@@ -63,7 +63,7 @@ public class PointUtils {
     /**
      * jts point to s2 point
      */
-    public static S2Point jtsPointToS2Point(Point point) {
+    public static S2Point jtsPointToS2PointEarth(Point point) {
         return S2LatLng.fromDegrees(point.getY(), point.getX()).toPoint();
     }
 
@@ -73,7 +73,7 @@ public class PointUtils {
     public static List<S2Point> jtsPointToS2PointList(List<Point> points) {
         List<S2Point> pointList = new ArrayList<>();
         for (Point point : points) {
-            pointList.add(jtsPointToS2Point(point));
+            pointList.add(jtsPointToS2PointEarth(point));
         }
         return pointList;
     }
@@ -81,10 +81,29 @@ public class PointUtils {
     /**
      * gis point builder
      */
-    public static org.postgis.Point GisPointBuilder(double lat, double lng) {
+    public static org.postgis.Point gisPointEarthBuilder(double lat, double lng) {
         org.postgis.Point point = new org.postgis.Point(lng, lat);
         point.setSrid(GeoConstant.DEFAULT_SRID);
         return point;
+    }
+
+    /**
+     * gis point to s2 point
+     */
+    public static S2Point gisPointToS2PointEarth(org.postgis.Point point) {
+        return S2LatLng.fromDegrees(point.getY(), point.getX()).toPoint();
+    }
+
+
+    public static double getEarthDistant(org.postgis.Point point,
+                                         org.postgis.Point otherPoint) {
+        if (GeoConstant.DEFAULT_SRID != point.getSrid() ||
+                GeoConstant.DEFAULT_SRID != point.getSrid()) {
+            throw new SebastianParamException("point or other is not in earth (srid != 4326)");
+        }
+        S2LatLng pointS2 = S2LatLng.fromDegrees(point.getY(), point.getX());
+        S2LatLng otherPointS2 = S2LatLng.fromDegrees(otherPoint.getY(), otherPoint.getX());
+        return pointS2.getEarthDistance(otherPointS2);
     }
 
 }
