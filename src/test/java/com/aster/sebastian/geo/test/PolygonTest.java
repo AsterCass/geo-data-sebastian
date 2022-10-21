@@ -1,6 +1,8 @@
 package com.aster.sebastian.geo.test;
 
+import com.alibaba.fastjson2.JSON;
 import com.aster.sebastian.geo.util.ConcaveHullUtils;
+import com.aster.sebastian.geo.util.PointUtils;
 import com.aster.sebastian.geo.util.PolygonUtils;
 import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -116,6 +118,9 @@ public class PolygonTest {
                         pointOnly, false, 0.9, true);
 
         org.postgis.Point pointz = PolygonUtils.getGisPolygonCenterPoint(polygon3);
+
+        List<String> st = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
+        System.out.println(JSON.toJSONString(st));
 
         System.out.println("111111");
     }

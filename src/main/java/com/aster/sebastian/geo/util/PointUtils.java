@@ -3,6 +3,7 @@ package com.aster.sebastian.geo.util;
 import com.aster.sebastian.geo.constant.GeoConstant;
 import com.aster.sebastian.geo.exception.SebastianParamException;
 import com.google.common.geometry.S2Cell;
+import com.google.common.geometry.S2CellId;
 import com.google.common.geometry.S2LatLng;
 import com.google.common.geometry.S2Point;
 import com.google.common.geometry.S2Region;
@@ -143,7 +144,21 @@ public class PointUtils {
         return point;
     }
 
+    public static String getCellIdByGisPoint(org.postgis.Point point) {
+        if (GeoConstant.DEFAULT_SRID != point.getSrid() ||
+                GeoConstant.DEFAULT_SRID != point.getSrid()) {
+            throw new SebastianParamException("point or other is not in earth (srid != 4326)");
+        }
 
+        S2Point s2Poi = gisPointToS2Point(point);
+        S2CellId cellId = S2CellId.fromLatLng(new S2LatLng(s2Poi));
+        return cellId.toToken();
+    }
+
+
+    /**
+     * two point distant
+     */
     public static double getEarthDistant(org.postgis.Point point,
                                          org.postgis.Point otherPoint) {
         if (GeoConstant.DEFAULT_SRID != point.getSrid() ||
