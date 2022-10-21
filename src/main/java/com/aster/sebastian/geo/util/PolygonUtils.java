@@ -6,7 +6,6 @@ import com.google.common.geometry.S2CellId;
 import com.google.common.geometry.S2Loop;
 import com.google.common.geometry.S2Point;
 import com.google.common.geometry.S2Polygon;
-import com.google.common.geometry.S2Polyline;
 import com.google.common.geometry.S2RegionCoverer;
 import org.locationtech.jts.algorithm.Orientation;
 import org.locationtech.jts.geom.Coordinate;
@@ -108,9 +107,15 @@ public class PolygonUtils {
                     PointUtils.getCellIdByGisPoint(polygon.getPoint(0))));
         }
         if (isLine(polygon)) {
-            return LineUtils.getCellIdListByS2Line(getLine(polygon), maxLevel, minLevel, maxCells);
+            List<String> cellIdToken = new ArrayList<>();
+            List<Point> points = getGisPointListByPolygon(polygon);
+            if (null != points) {
+                for (Point s2Point : points) {
+                    cellIdToken.add(PointUtils.getCellIdByGisPoint(s2Point));
+                }
+            }
+            return cellIdToken;
         }
-
 
         S2Polygon s2Polygon = gisPolygonToS2Polygon(polygon);
 
@@ -145,8 +150,11 @@ public class PolygonUtils {
     }
 
     public static boolean isLine(Polygon polygon) {
-        if (null == polygon || polygon.numPoints() <= LINE_NUM) {
+        if (null == polygon || polygon.numPoints() < LINE_NUM) {
             return false;
+        }
+        if (LINE_NUM == polygon.numPoints()) {
+            return true;
         }
         boolean collinear = true;
         for (int count = LINE_NUM; count < polygon.numPoints(); ++count) {
@@ -162,13 +170,13 @@ public class PolygonUtils {
         return collinear;
     }
 
-    public static S2Polyline getLine(Polygon polygon) {
+    public static List<Point> getGisPointListByPolygon(Polygon polygon) {
         if (isLine(polygon)) {
-            List<S2Point> points = new ArrayList<>();
+            List<Point> points = new ArrayList<>();
             for (int count = 0; count < polygon.numPoints(); ++count) {
-                points.add(PointUtils.gisPointToS2PointEarth(polygon.getPoint(count)));
+                points.add(polygon.getPoint(count));
             }
-            return new S2Polyline(points);
+            return points;
         }
         return null;
     }

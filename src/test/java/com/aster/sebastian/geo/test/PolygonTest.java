@@ -91,12 +91,14 @@ public class PolygonTest {
 
         org.postgis.Point pointx = PolygonUtils.getGisPolygonCenterPoint(polygon1);
 
-        pointOnly.add(point1);
-        org.postgis.Polygon polygonError =
-                ConcaveHullUtils.getGisPolygonEarthByPoint(
-                        pointOnly, false, 0.9, true);
+        List<String> cellId1 = PolygonUtils.getCellIdListByPolygon(polygon1, 20, 5, 20);
 
-        org.postgis.Point pointError = PolygonUtils.getGisPolygonCenterPoint(polygon1);
+//        pointOnly.add(point1);
+//        org.postgis.Polygon polygonError =
+//                ConcaveHullUtils.getGisPolygonEarthByPoint(
+//                        pointOnly, false, 0.9, true);
+//
+//        org.postgis.Point pointError = PolygonUtils.getGisPolygonCenterPoint(polygon1);
 
 
         org.postgis.Point point2 = new org.postgis.Point(120.85810025263835, 30.504777594565585);
@@ -109,6 +111,7 @@ public class PolygonTest {
         org.postgis.Point pointy = PolygonUtils.getGisPolygonCenterPoint(polygon2);
 
 
+        List<String> cellId2 = PolygonUtils.getCellIdListByPolygon(polygon2, 20, 5, 20);
 
         org.postgis.Point point3 = new org.postgis.Point(120.0286811866777, 30.242195914437744);
         point3.setSrid(4326);
@@ -121,6 +124,8 @@ public class PolygonTest {
 
         List<String> st = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
         System.out.println(JSON.toJSONString(st));
+
+        List<String> cellId3 = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
 
         System.out.println("111111");
     }
