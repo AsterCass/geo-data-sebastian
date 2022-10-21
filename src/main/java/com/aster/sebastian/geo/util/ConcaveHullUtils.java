@@ -11,7 +11,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.PrecisionModel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author astercasc
@@ -23,8 +23,8 @@ public class ConcaveHullUtils {
      * <a href="https://gis.stackexchange.com/questions/158693/how-to-calculate-the-form-or-shape-factor-of-a-polygon">how to get</a>
      * <a href="https://postgis.net/docs/ST_ConcaveHull.html">post-gis</a>
      */
-    public static Polygon getPolygonEarthByPoint(ArrayList<Point> points,
-                                                 boolean holesAllowed, double ratio) {
+    public static Polygon getJtsPolygonEarthByPoint(List<Point> points,
+                                                    boolean holesAllowed, double ratio) {
         ConcaveHull concaveHull = new ConcaveHull(new MultiPoint(points.toArray(new Point[0]),
                 new GeometryFactory(new PrecisionModel(), GeoConstant.DEFAULT_SRID)));
         concaveHull.setHolesAllowed(holesAllowed);
@@ -35,6 +35,23 @@ public class ConcaveHullUtils {
             return Orientation.isCCW(polygon.getCoordinates()) ? polygon : polygon.reverse();
         } else {
             throw new SebastianParamException("points param error");
+        }
+    }
+
+    public static org.postgis.Polygon getGisPolygonEarthByPoint(List<org.postgis.Point> points,
+                                                                boolean holesAllowed, double ratio,
+                                                                boolean compatiblePointAndLine) {
+        List<Point> jtsPointList = PointUtils.gisPointToJtsPointList(points);
+        if (compatiblePointAndLine) {
+            try {
+                Polygon jtsPol = getJtsPolygonEarthByPoint(jtsPointList, holesAllowed, ratio);
+                return PolygonUtils.jtsPolygonToGisPolygonEarth(jtsPol);
+            } catch (SebastianParamException exception) {
+                return PolygonUtils.gisPolygonBuilderByGisPoints(points);
+            }
+        } else {
+            Polygon jtsPol = getJtsPolygonEarthByPoint(jtsPointList, holesAllowed, ratio);
+            return PolygonUtils.jtsPolygonToGisPolygonEarth(jtsPol);
         }
     }
 

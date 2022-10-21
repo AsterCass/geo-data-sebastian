@@ -10,6 +10,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PolygonTest {
 
@@ -54,7 +55,7 @@ public class PolygonTest {
                 Arrays.asList(point1, point2, point3, point4, point5, point6, point7,
                         point8, point9, point10, point11, point12, point13, point14, point15, point16));
 
-        Polygon polygon = ConcaveHullUtils.getPolygonEarthByPoint(points, false, 0.9);
+        Polygon polygon = ConcaveHullUtils.getJtsPolygonEarthByPoint(points, false, 0.9);
 
 
         org.postgis.Polygon polygon1 = PolygonUtils.jtsPolygonToGisPolygonEarth(polygon);
@@ -74,4 +75,50 @@ public class PolygonTest {
 
 
     }
+
+    @Test
+    public void iniPolTest() {
+
+        org.postgis.Point point1 = new org.postgis.Point(120.14510569119948, 30.3312283585627);
+        point1.setSrid(4326);
+        List<org.postgis.Point> pointOnly = new ArrayList<>();
+        pointOnly.add(point1);
+        org.postgis.Polygon polygon1 =
+                ConcaveHullUtils.getGisPolygonEarthByPoint(
+                        pointOnly, false, 0.9, true);
+
+        org.postgis.Point pointx = PolygonUtils.getGisPolygonCenterPoint(polygon1);
+
+        pointOnly.add(point1);
+        org.postgis.Polygon polygonError =
+                ConcaveHullUtils.getGisPolygonEarthByPoint(
+                        pointOnly, false, 0.9, true);
+
+        org.postgis.Point pointError = PolygonUtils.getGisPolygonCenterPoint(polygon1);
+
+
+        org.postgis.Point point2 = new org.postgis.Point(120.85810025263835, 30.504777594565585);
+        point2.setSrid(4326);
+        pointOnly.add(point2);
+        org.postgis.Polygon polygon2 =
+                ConcaveHullUtils.getGisPolygonEarthByPoint(
+                        pointOnly, false, 0.9, true);
+
+        org.postgis.Point pointy = PolygonUtils.getGisPolygonCenterPoint(polygon2);
+
+
+
+        org.postgis.Point point3 = new org.postgis.Point(120.0286811866777, 30.242195914437744);
+        point3.setSrid(4326);
+        pointOnly.add(point3);
+        org.postgis.Polygon polygon3 =
+                ConcaveHullUtils.getGisPolygonEarthByPoint(
+                        pointOnly, false, 0.9, true);
+
+        org.postgis.Point pointz = PolygonUtils.getGisPolygonCenterPoint(polygon3);
+
+        System.out.println("111111");
+    }
+
+
 }

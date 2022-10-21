@@ -94,6 +94,55 @@ public class PointUtils {
         return S2LatLng.fromDegrees(point.getY(), point.getX()).toPoint();
     }
 
+    /**
+     * gis point to jts point
+     */
+    public static Point gisPointToJtsPoint(org.postgis.Point point) {
+        Coordinate[] coordinates = {new Coordinate(point.getX(), point.getY())};
+        CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
+        return new Point(coordinateSequence, new GeometryFactory(new PrecisionModel(), point.srid));
+    }
+
+
+    /**
+     * jts point to gis point
+     */
+    public static org.postgis.Point jtsPointToGisPoint(Point point) {
+        org.postgis.Point gisPoint = new org.postgis.Point(point.getX(), point.getY());
+        gisPoint.setSrid(point.getSRID());
+        return gisPoint;
+    }
+
+    /**
+     * gis point to jts point list
+     */
+    public static List<Point> gisPointToJtsPointList(List<org.postgis.Point> points) {
+        List<Point> pointList = new ArrayList<>();
+        if (null != points && 0 != points.size()) {
+            for (org.postgis.Point point : points) {
+                pointList.add(gisPointToJtsPoint(point));
+            }
+        }
+        return pointList;
+    }
+
+    /**
+     * gis point to s2 point
+     */
+    public static S2Point gisPointToS2Point(org.postgis.Point point) {
+        return S2LatLng.fromDegrees(point.getY(), point.getX()).toPoint();
+    }
+
+    /**
+     * s2 point to gis point
+     */
+    public static org.postgis.Point s2PointToGisPointEarth(S2Point s2Point) {
+        S2LatLng s2LatLng = new S2LatLng(s2Point);
+        org.postgis.Point point = new org.postgis.Point(s2LatLng.lngDegrees(), s2LatLng.latDegrees());
+        point.setSrid(GeoConstant.DEFAULT_SRID);
+        return point;
+    }
+
 
     public static double getEarthDistant(org.postgis.Point point,
                                          org.postgis.Point otherPoint) {

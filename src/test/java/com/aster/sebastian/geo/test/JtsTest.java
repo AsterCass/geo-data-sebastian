@@ -31,7 +31,7 @@ public class JtsTest {
         Point point9 = new Point(new Coordinate(100.0, 1.0), new PrecisionModel(), 0);
         Point[] points = {point1, point2, point3, point4, point4, point5, point6, point7, point8, point9};
 
-        Geometry geometry = ConcaveHullUtils.getPolygonEarthByPoint(
+        Geometry geometry = ConcaveHullUtils.getJtsPolygonEarthByPoint(
                 new ArrayList<>(Arrays.asList(points)), false, 0.8);
 
         Geometry newGeo1 = DouglasPeuckerSimplifier.simplify(geometry, 1);

@@ -248,7 +248,7 @@ public class BaseTest {
 
 
         org.locationtech.jts.geom.Geometry geometry = ConcaveHullUtils
-                .getPolygonEarthByPoint(points, false, 0.9);
+                .getJtsPolygonEarthByPoint(points, false, 0.9);
 
         org.locationtech.jts.geom.Point pointIn = new org.locationtech.jts.geom.Point
                 (new Coordinate(120.14510569119948, 30.3312283585627), new PrecisionModel(), 4326);
@@ -301,6 +301,9 @@ public class BaseTest {
 
         org.locationtech.jts.geom.Point pointInx = PointUtils.s2PointToJtsPoint(s2PointIn);
         org.locationtech.jts.geom.Point pointNotInx = PointUtils.s2PointToJtsPoint(s2PointNotIn);
+
+        Point point = PointUtils.s2PointToGisPointEarth(s2PointIn);
+        S2Point point1 = PointUtils.gisPointToS2Point(point);
 
         System.out.println("11111");
 
