@@ -32,6 +32,14 @@ public class PolygonUtils {
 
     private static final int LINE_NUM = 2;
 
+    /**
+     * is or not a strict polygon
+     */
+    public static boolean isGisPolygon(Polygon polygon) {
+        return null != polygon && 0 != polygon.numPoints() &&
+                !isPoint(polygon) && !isLine(polygon);
+    }
+
     public static Polygon gisPolygonBuilderByGisPoints(List<Point> points) {
         if (null == points) {
             throw new RuntimeException("points is null");
