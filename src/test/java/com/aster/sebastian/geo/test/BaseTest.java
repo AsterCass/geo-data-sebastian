@@ -56,10 +56,6 @@ public class BaseTest {
 
         List<Address> list = addressMapper.selectAll();
 
-        Address address = list.get(0);
-
-        PGgeometry pGgeometry = new PGgeometry(address.getGeom());
-        Geometry geometry = pGgeometry.getGeometry();
 
         sqlSession.commit();
         sqlSession.close();

@@ -6,7 +6,7 @@
 
     <groupId>com.astercasc</groupId>
     <artifactId>geo-data-sebastian</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>geo-data-sebastian</name>
@@ -43,13 +43,6 @@
     </properties>
 
     <dependencies>
-
-
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
-        </dependency>
 
         <dependency>
             <groupId>org.mybatis</groupId>
