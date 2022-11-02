@@ -127,16 +127,16 @@ public class PolygonUtils {
 
         S2Polygon s2Polygon = gisPolygonToS2Polygon(polygon);
 
-        ArrayList<S2CellId> test = new ArrayList<>();
+        ArrayList<S2CellId> cellIdList = new ArrayList<>();
 
         S2RegionCoverer s2RegionCoverer = new S2RegionCoverer();
         s2RegionCoverer.setMaxLevel(maxLevel);
         s2RegionCoverer.setMinLevel(minLevel);
         s2RegionCoverer.setMaxCells(maxCells);
 
-        s2RegionCoverer.getCovering(s2Polygon, test);
+        s2RegionCoverer.getCovering(s2Polygon, cellIdList);
 
-        return test.stream().map(S2CellId::toToken).collect(Collectors.toList());
+        return cellIdList.stream().map(S2CellId::toToken).collect(Collectors.toList());
     }
 
     public static boolean isPoint(Polygon polygon) {
