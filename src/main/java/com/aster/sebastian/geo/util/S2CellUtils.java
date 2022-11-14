@@ -41,11 +41,28 @@ public class S2CellUtils {
         return PolygonUtils.getCellIdListByPolygon(polygon, maxLevel, minLevel, maxCells);
     }
 
+    /**
+     * simple radius around 7km(10 level) - 10m (20level)
+     * default max cell num equal 20
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
+     */
     public static List<String> getCellIdListByCircleSimple(Point point, double radius) {
         return getCellIdListByCircle(point, radius,
                 RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, RECOMMEND_MAX_CELL_NUM);
     }
 
+    /**
+     * simple radius around 7km(10 level) - 10m (20level)
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
+     */
+    public static List<String> getCellIdListByCircleSimple(Point point, double radius, Integer maxCellNum) {
+        return getCellIdListByCircle(point, radius,
+                RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, maxCellNum);
+    }
+
+    /**
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">level reference</a>
+     */
     public static List<String> getCellIdListByCircle(Point point, double radius,
                                                      int minLevel, int maxLevel, int maxCells) {
 

@@ -24,8 +24,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.postgis.Geometry;
-import org.postgis.PGgeometry;
 import org.postgis.Point;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;

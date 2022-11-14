@@ -11,11 +11,11 @@ public class S2CellTest {
 
     @Test
     public void circleTest() {
-        Point point = new Point(120.14004736097823, 30.24686226145723);
+        Point point = new Point(120.130832, 30.292338);
         point.setSrid(4326);
 
         List<String> cellIdList = S2CellUtils.getCellIdListByCircleSimple(
-                point, 10 * 1000);
+                point, 1 * 1000, 1);
 
         StringBuilder cellIdString = new StringBuilder();
         for (String cellId : cellIdList) {
