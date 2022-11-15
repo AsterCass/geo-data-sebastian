@@ -1,5 +1,6 @@
 package com.aster.sebastian.geo.util;
 
+import com.aster.sebastian.geo.constant.GoogleCellConstant;
 import com.google.common.geometry.S2Cap;
 import com.google.common.geometry.S2CellId;
 import com.google.common.geometry.S2Point;
@@ -8,6 +9,7 @@ import org.postgis.Point;
 import org.postgis.Polygon;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,14 +32,14 @@ public class S2CellUtils {
         return (2 * Math.PI) * (meters / K_EARTH_CIRCUMFERENCE_METERS);
     }
 
-    public static List<String> getCellIdListByPolygonSimple(Polygon polygon, int maxLevel,
-                                                            int minLevel) {
+    public static List<Long> getCellIdListByPolygonSimple(Polygon polygon, int maxLevel,
+                                                          int minLevel) {
         return getCellIdListByPolygon(polygon, maxLevel, minLevel, RECOMMEND_MAX_CELL_NUM);
     }
 
 
-    public static List<String> getCellIdListByPolygon(Polygon polygon, int maxLevel,
-                                                      int minLevel, int maxCells) {
+    public static List<Long> getCellIdListByPolygon(Polygon polygon, int maxLevel,
+                                                    int minLevel, int maxCells) {
         return PolygonUtils.getCellIdListByPolygon(polygon, maxLevel, minLevel, maxCells);
     }
 
@@ -46,8 +48,18 @@ public class S2CellUtils {
      * default max cell num equal 20
      * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
      */
-    public static List<String> getCellIdListByCircleSimple(Point point, double radius) {
+    public static List<Long> getCellIdListByCircleSimple(Point point, double radius) {
         return getCellIdListByCircle(point, radius,
+                RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, RECOMMEND_MAX_CELL_NUM);
+    }
+
+    /**
+     * simple radius around 7km(10 level) - 10m (20level)
+     * default max cell num equal 20
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
+     */
+    public static List<S2CellId> getCellListByCircleSimple(Point point, double radius) {
+        return getCellListByCircle(point, radius,
                 RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, RECOMMEND_MAX_CELL_NUM);
     }
 
@@ -55,15 +67,33 @@ public class S2CellUtils {
      * simple radius around 7km(10 level) - 10m (20level)
      * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
      */
-    public static List<String> getCellIdListByCircleSimple(Point point, double radius, Integer maxCellNum) {
+    public static List<Long> getCellIdListByCircleSimple(Point point, double radius, Integer maxCellNum) {
         return getCellIdListByCircle(point, radius,
+                RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, maxCellNum);
+    }
+
+    /**
+     * simple radius around 7km(10 level) - 10m (20level)
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">else around reference</a>
+     */
+    public static List<S2CellId> getCellListByCircleSimple(Point point, double radius, Integer maxCellNum) {
+        return getCellListByCircle(point, radius,
                 RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_LEVEL, maxCellNum);
     }
 
     /**
      * <a href="https://s2geometry.io/resources/s2cell_statistics">level reference</a>
      */
-    public static List<String> getCellIdListByCircle(Point point, double radius,
+    public static List<Long> getCellIdListByCircle(Point point, double radius,
+                                                   int minLevel, int maxLevel, int maxCells) {
+        return getCellListByCircle(point, radius, minLevel, maxLevel, maxCells)
+                .stream().map(S2CellId::id).collect(Collectors.toList());
+    }
+
+    /**
+     * <a href="https://s2geometry.io/resources/s2cell_statistics">level reference</a>
+     */
+    public static List<S2CellId> getCellListByCircle(Point point, double radius,
                                                      int minLevel, int maxLevel, int maxCells) {
 
         S2Point thisPoint = PointUtils.gisPointToS2PointEarth(point);
@@ -79,7 +109,29 @@ public class S2CellUtils {
 
         s2RegionCoverer.getCovering(region, cellIdList);
 
-        return cellIdList.stream().map(S2CellId::toToken).collect(Collectors.toList());
+        return cellIdList;
+    }
+
+    /**
+     * 获取指定级别的全部子cell
+     */
+    public static List<Long> getChildId(S2CellId root, int targetLevel) {
+        if (root.level() < targetLevel) {
+            long interval = (root.childEnd().id() - root.childBegin().id()) /
+                    GoogleCellConstant.CHILD_CELL_NUM;
+            List<Long> list = new ArrayList<>();
+            for (int count = 0; count < GoogleCellConstant.CHILD_CELL_NUM; count++) {
+                long id = root.childBegin().id() + interval * count;
+                S2CellId cellId = new S2CellId(id);
+                List<Long> childrenCellId = getChildId(cellId, targetLevel);
+                list.addAll(childrenCellId);
+            }
+            return list;
+        } else if (root.level() == targetLevel) {
+            return Collections.singletonList(root.id());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
 

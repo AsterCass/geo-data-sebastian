@@ -144,7 +144,7 @@ public class PointUtils {
         return point;
     }
 
-    public static String getCellIdByGisPoint(org.postgis.Point point) {
+    public static Long getCellIdByGisPoint(org.postgis.Point point) {
         if (GeoConstant.DEFAULT_SRID != point.getSrid() ||
                 GeoConstant.DEFAULT_SRID != point.getSrid()) {
             throw new SebastianParamException("point or other is not in earth (srid != 4326)");
@@ -152,7 +152,11 @@ public class PointUtils {
 
         S2Point s2Poi = gisPointToS2Point(point);
         S2CellId cellId = S2CellId.fromLatLng(new S2LatLng(s2Poi));
-        return cellId.toToken();
+        return cellId.id();
+    }
+
+    public static Long getCellIdByLatLng(double lat, double lng) {
+        return getCellIdByGisPoint(gisPointEarthBuilder(lat, lng));
     }
 
 

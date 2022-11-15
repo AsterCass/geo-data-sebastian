@@ -1,6 +1,7 @@
 package com.aster.sebastian.geo.test;
 
 import com.aster.sebastian.geo.util.S2CellUtils;
+import com.google.common.geometry.S2CellId;
 import org.junit.Test;
 import org.postgis.Point;
 
@@ -14,11 +15,11 @@ public class S2CellTest {
         Point point = new Point(120.130832, 30.292338);
         point.setSrid(4326);
 
-        List<String> cellIdList = S2CellUtils.getCellIdListByCircleSimple(
+        List<Long> cellIdList = S2CellUtils.getCellIdListByCircleSimple(
                 point, 1 * 1000, 1);
 
         StringBuilder cellIdString = new StringBuilder();
-        for (String cellId : cellIdList) {
+        for (Long cellId : cellIdList) {
             cellIdString.append(cellId).append(",");
         }
         System.out.println(cellIdString);
@@ -26,6 +27,19 @@ public class S2CellTest {
 
         System.out.println("1111");
 
+    }
+
+    @Test
+    public void buildCell() {
+
+        S2CellId s2CellId = S2CellId.fromToken("344b6244");
+        long id = s2CellId.id();
+        long idMax = s2CellId.rangeMax().id();
+        long idMin = s2CellId.rangeMin().id();
+
+        boolean test = s2CellId.contains(S2CellId.fromToken("344b6247"));
+        List<Long> x = S2CellUtils.getChildId(s2CellId, s2CellId.level() + 2);
+        System.out.println("1111");
     }
 
 

@@ -90,7 +90,7 @@ public class PolygonTest {
 
         org.postgis.Point pointx = PolygonUtils.getGisPolygonCenterPoint(polygon1);
 
-        List<String> cellId1 = PolygonUtils.getCellIdListByPolygon(polygon1, 20, 5, 20);
+        List<Long> cellId1 = PolygonUtils.getCellIdListByPolygon(polygon1, 20, 5, 20);
 
 //        pointOnly.add(point1);
 //        org.postgis.Polygon polygonError =
@@ -110,7 +110,7 @@ public class PolygonTest {
         org.postgis.Point pointy = PolygonUtils.getGisPolygonCenterPoint(polygon2);
 
 
-        List<String> cellId2 = PolygonUtils.getCellIdListByPolygon(polygon2, 20, 5, 20);
+        List<Long> cellId2 = PolygonUtils.getCellIdListByPolygon(polygon2, 20, 5, 20);
 
         org.postgis.Point point3 = new org.postgis.Point(120.0286811866777, 30.242195914437744);
         point3.setSrid(4326);
@@ -121,10 +121,10 @@ public class PolygonTest {
 
         org.postgis.Point pointz = PolygonUtils.getGisPolygonCenterPoint(polygon3);
 
-        List<String> st = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
+        List<Long> st = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
         System.out.println(JSON.toJSONString(st));
 
-        List<String> cellId3 = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
+        List<Long> cellId3 = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
 
         System.out.println("111111");
     }
