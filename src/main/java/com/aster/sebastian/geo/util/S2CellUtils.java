@@ -32,15 +32,22 @@ public class S2CellUtils {
         return (2 * Math.PI) * (meters / K_EARTH_CIRCUMFERENCE_METERS);
     }
 
-    public static List<Long> getCellIdListByPolygonSimple(Polygon polygon, int maxLevel,
-                                                          int minLevel) {
-        return getCellIdListByPolygon(polygon, maxLevel, minLevel, RECOMMEND_MAX_CELL_NUM);
+    public static List<Long> getCellIdListByPolygonSimple(Polygon polygon) {
+        return PolygonUtils.getCellIdListByPolygon(polygon, RECOMMEND_MAX_LEVEL, RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_CELL_NUM);
     }
 
+    public static List<Long> getCellIdListByPolygonSimple(Polygon polygon, int maxLevel,
+                                                          int minLevel) {
+        return PolygonUtils.getCellIdListByPolygon(polygon, maxLevel, minLevel, RECOMMEND_MAX_CELL_NUM);
+    }
 
-    public static List<Long> getCellIdListByPolygon(Polygon polygon, int maxLevel,
-                                                    int minLevel, int maxCells) {
-        return PolygonUtils.getCellIdListByPolygon(polygon, maxLevel, minLevel, maxCells);
+    public static List<S2CellId> getCellListByPolygon(Polygon polygon, int maxLevel,
+                                                      int minLevel) {
+        return PolygonUtils.getCellListByPolygon(polygon, maxLevel, minLevel, RECOMMEND_MAX_CELL_NUM);
+    }
+
+    public static List<S2CellId> getCellListByPolygon(Polygon polygon) {
+        return PolygonUtils.getCellListByPolygon(polygon, RECOMMEND_MAX_LEVEL, RECOMMEND_MIN_LEVEL, RECOMMEND_MAX_CELL_NUM);
     }
 
     /**

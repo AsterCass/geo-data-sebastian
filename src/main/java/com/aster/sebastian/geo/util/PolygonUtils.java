@@ -106,20 +106,27 @@ public class PolygonUtils {
 
     public static List<Long> getCellIdListByPolygon(Polygon polygon, int maxLevel,
                                                     int minLevel, int maxCells) {
+
+        return getCellListByPolygon(polygon, maxLevel, minLevel, maxCells)
+                .stream().map(S2CellId::id).collect(Collectors.toList());
+    }
+
+    public static List<S2CellId> getCellListByPolygon(Polygon polygon, int maxLevel,
+                                                      int minLevel, int maxCells) {
         if (null == polygon || 0 == polygon.numPoints()) {
             return null;
         }
 
         if (isPoint(polygon)) {
             return new ArrayList<>(Collections.singletonList(
-                    PointUtils.getCellIdByGisPoint(polygon.getPoint(0))));
+                    PointUtils.getCellByGisPoint(polygon.getPoint(0))));
         }
         if (isLine(polygon)) {
-            List<Long> cellIdList = new ArrayList<>();
+            List<S2CellId> cellIdList = new ArrayList<>();
             List<Point> points = getGisPointListByPolygon(polygon);
             if (null != points) {
                 for (Point s2Point : points) {
-                    cellIdList.add(PointUtils.getCellIdByGisPoint(s2Point));
+                    cellIdList.add(PointUtils.getCellByGisPoint(s2Point));
                 }
             }
             return cellIdList;
@@ -136,7 +143,7 @@ public class PolygonUtils {
 
         s2RegionCoverer.getCovering(s2Polygon, cellIdList);
 
-        return cellIdList.stream().map(S2CellId::id).collect(Collectors.toList());
+        return cellIdList;
     }
 
     public static boolean isPoint(Polygon polygon) {
