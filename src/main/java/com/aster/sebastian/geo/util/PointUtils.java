@@ -169,7 +169,7 @@ public class PointUtils {
     public static double getEarthDistant(org.postgis.Point point,
                                          org.postgis.Point otherPoint) {
         if (GeoConstant.DEFAULT_SRID != point.getSrid() ||
-                GeoConstant.DEFAULT_SRID != point.getSrid()) {
+                GeoConstant.DEFAULT_SRID != otherPoint.getSrid()) {
             throw new SebastianParamException("point or other is not in earth (srid != 4326)");
         }
         S2LatLng pointS2 = S2LatLng.fromDegrees(point.getY(), point.getX());
