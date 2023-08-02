@@ -2,7 +2,12 @@ package com.aster.sebastian.geo.test;
 
 import com.alibaba.fastjson2.JSON;
 import com.aster.sebastian.geo.util.ConcaveHullUtils;
+import com.aster.sebastian.geo.util.GeoJsonUtils;
+import com.aster.sebastian.geo.util.PointUtils;
 import com.aster.sebastian.geo.util.PolygonUtils;
+import com.google.common.geometry.S2Cell;
+import com.google.common.geometry.S2CellId;
+import com.google.common.geometry.S2Point;
 import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
@@ -124,7 +129,18 @@ public class PolygonTest {
         List<Long> st = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
         System.out.println(JSON.toJSONString(st));
 
-        List<Long> cellId3 = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 20);
+        List<Long> cellId3 = PolygonUtils.getCellIdListByPolygon(polygon3, 20, 5, 5);
+
+
+        S2Cell randomCell = new S2Cell(new S2CellId(cellId3.get(0)));
+        for (int v = 0; v < 4; ++v) {
+            S2Point point = randomCell.getVertex(v);
+            org.postgis.Point p = PointUtils.s2PointToGisPointEarth(point);
+            System.out.println(p.getX() + "," + p.getY());
+        }
+
+        System.out.println(GeoJsonUtils.getGeoJsonFromCellIdList(cellId3));
+
 
         System.out.println("111111");
     }

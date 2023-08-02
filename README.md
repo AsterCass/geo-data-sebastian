@@ -14,6 +14,7 @@
 9. 计算多边形的中心点
 10. 获取多边形的在google-s2算法下的cellIdList
 11. 判断多边形是否为线/点
+12. 生成geoJson用于前端图像绘制
 
 ### 进行中
 
@@ -66,3 +67,10 @@ public interface BlockMapper extends Mapper<Block> {
 }
 ```
 
+## 辅助网站
+1. [googleS2文档](https://s2geometry.io)
+2. [googleS2辅助文档](https://github.com/halfrost/Halfrost-Field)
+3. [多边形生成网站](http://apps.headwallphotonics.com/)
+4. [googleS2算法可视化](https://s2.sidewalklabs.com/regioncoverer/) **目前此网站已挂**
+5. [地图范围标点可视化备用](https://geojson.io/)
+6. [googleS2优化GeoJson生成工具](https://github.com/MzHub/osmcoverer) **也可以使用本包中的GeoJsonUtils.getGeoJsonFromCellIdList等方法**
