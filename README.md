@@ -1,5 +1,14 @@
 # 空间数据处理/存储/计算 geo-data-sebastian
 
+## 引用
+```xml
+        <dependency>
+            <groupId>com.astercasc</groupId>
+            <artifactId>geo-data-sebastian</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+```
+
 ## 功能清单
 ### 已完成
 1. 支持mybatis直接使用gis中的数据类型进行处理不需要单独转换
